@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'awesome_print'
+require 'sequel'
 
 class Player
 
@@ -61,7 +62,7 @@ class Player
   end
 
   def extract_attributes
-    attributes = Array.new
+    @attributes = Array.new
 
     names = get_names
     teams = get_teams
@@ -88,27 +89,48 @@ class Player
               goals_conceded,
               half_times,
               team_performances) do |name, team, position, price, goal, assist, yellow, red, clean_sheet, goal_conceded, half_time, team_performance|
-      attributes.push Hash.new
-      attributes.last["name"] = name
-      attributes.last["team"] = team
-      attributes.last["position"] = position
-      attributes.last["price"] = price
-      attributes.last["goal"] = goal
-      attributes.last["assist"] = assist
-      attributes.last["yellow"] = yellow
-      attributes.last["red"] = red
-      attributes.last["clean_sheet"] = clean_sheet
-      attributes.last["goal_conceded"] = goal_conceded
-      attributes.last["half_time"] = half_time
-      attributes.last["team_performance"] = team_performance
+      @attributes.push Hash.new
+      @attributes.last[:name] = name
+      @attributes.last[:team] = team
+      @attributes.last[:position] = position
+      @attributes.last[:price] = price
+      @attributes.last[:goal] = goal
+      @attributes.last[:assist] = assist
+      @attributes.last[:yellow] = yellow
+      @attributes.last[:red] = red
+      @attributes.last[:clean_sheet] = clean_sheet
+      @attributes.last[:goal_conceded] = goal_conceded
+      @attributes.last[:half_time] = half_time
+      @attributes.last[:team_performance] = team_performance
     end
 
-    ap attributes
-
+    @attributes
   end
 
   def save_attributes
-    # @info_by_player.add_to_sql
-  end
+    player = Sequel.sqlite('player.db')
 
+    # player.create_table :attributes do
+    #   primary_key :id
+    #   String :name
+    #   String :team
+    #   String :position
+    #   Float :price
+    #   Float :goal
+    #   Float :assist
+    #   Float :yellow
+    #   Float :red
+    #   Float :clean_sheet
+    #   Float :goal_conceded
+    #   Float :half_time
+    #   Float :team_performance
+    # end
+
+    attributes = player[:attributes]
+
+    @attributes.each do |attributes_player|
+      attributes.insert(attributes_player)
+    end
+
+  end
 end
