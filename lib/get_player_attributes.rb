@@ -6,9 +6,9 @@
 require 'awesome_print'
 
 require_relative '../payload_builder/player_payload_builder'
-require_relative '../requests/player'
+require_relative '../requests/player_request'
 
-player = Player.new(PlayerPayloadBuilder.payload('412','2'))
+player = PlayerRequest.new(PlayerPayloadBuilder.payload('412','2'))
 player.get_info
 player.get_attributes
-# player.save_attributes
+player.save_attributes
