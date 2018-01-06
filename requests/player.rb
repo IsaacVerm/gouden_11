@@ -1,6 +1,7 @@
 require 'nokogiri'
+require 'rest-client'
+
 require 'awesome_print'
-require 'sequel'
 
 class Player
 
@@ -55,82 +56,54 @@ class Player
     end
   end
 
-  def get_player_values(value_name)
-    ind = PLAYER_VALUES_XPATH_IND[value_name]
+  def get_attribute(attribute)
+    ind = PLAYER_VALUES_XPATH_IND[attribute]
 
     text(@html.xpath("//table[@class='playerlist']/tbody/tr/td[#{ind}]"))
   end
 
-  def extract_attributes
-    @attributes = Array.new
+  def get_attributes_as_hash_of_arrays
+    attributes = Hash.new
 
-    names = get_names
-    teams = get_teams
-    positions = get_positions
-    prices = get_player_values("price")
-    goals = get_player_values("goal")
-    assists = get_player_values("assist")
-    yellows = get_player_values("yellow")
-    reds = get_player_values("red")
-    clean_sheets = get_player_values("clean_sheet")
-    goals_conceded = get_player_values("goal_conceded")
-    half_times = get_player_values("half_time")
-    team_performances = get_player_values("team_performance")
+    attributes["name"] = get_names
+    attributes["team"] = get_teams
 
-    # very ugly, refactor
-    names.zip(teams,
-              positions,
-              prices,
-              goals,
-              assists,
-              yellows,
-              reds,
-              clean_sheets,
-              goals_conceded,
-              half_times,
-              team_performances) do |name, team, position, price, goal, assist, yellow, red, clean_sheet, goal_conceded, half_time, team_performance|
-      @attributes.push Hash.new
-      @attributes.last[:name] = name
-      @attributes.last[:team] = team
-      @attributes.last[:position] = position
-      @attributes.last[:price] = price
-      @attributes.last[:goal] = goal
-      @attributes.last[:assist] = assist
-      @attributes.last[:yellow] = yellow
-      @attributes.last[:red] = red
-      @attributes.last[:clean_sheet] = clean_sheet
-      @attributes.last[:goal_conceded] = goal_conceded
-      @attributes.last[:half_time] = half_time
-      @attributes.last[:team_performance] = team_performance
+    PLAYER_VALUES_XPATH_IND.keys.each do |attribute|
+      attributes[attribute] = get_attribute(attribute)
     end
 
-    @attributes
+    return attributes
+  end
+
+  def attributes_to_array_of_hashes(attributes_hash)
+    attributes_array = Array.new
+
+    array_length = attributes_hash["name"].size # they're all the same length
+    player_ind = 0..(array_length - 1)
+
+    player_ind.each do |i|
+      player_hash = Hash.new
+      attributes = attributes_hash.keys
+
+      attributes.each do |attribute|
+        player_hash[attribute] = attributes_hash[attribute][i]
+      end
+
+      attributes_array << player_hash
+    end
+
+    return attributes_array
+  end
+
+  def get_attributes
+    attributes_hash = get_attributes_as_hash_of_arrays
+    attributes = attributes_to_array_of_hashes(attributes_hash)
+
+    return attributes
   end
 
   def save_attributes
-    player = Sequel.sqlite('player.db')
-
-    # player.create_table :attributes do
-    #   primary_key :id
-    #   String :name
-    #   String :team
-    #   String :position
-    #   Float :price
-    #   Float :goal
-    #   Float :assist
-    #   Float :yellow
-    #   Float :red
-    #   Float :clean_sheet
-    #   Float :goal_conceded
-    #   Float :half_time
-    #   Float :team_performance
-    # end
-
-    attributes = player[:attributes]
-
-    @attributes.each do |attributes_player|
-      attributes.insert(attributes_player)
-    end
 
   end
+
 end
