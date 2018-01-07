@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="174e907b-4677-4999-80ea-e56c19183ffc" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/gouden_11" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/gouden_11" afterPath="$PROJECT_DIR$/data/database/gouden_11" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="174e907b-4677-4999-80ea-e56c19183ffc" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -86,17 +82,6 @@
             <path>
               <item name="gouden_11" type="b2602c69:ProjectViewProjectNode" />
               <item name="gouden_11" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="gouden_11" type="b2602c69:ProjectViewProjectNode" />
-              <item name="gouden_11" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="gouden_11" type="b2602c69:ProjectViewProjectNode" />
-              <item name="gouden_11" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -248,12 +233,12 @@
       <updated>1514656988707</updated>
       <workItem from="1514656990026" duration="17926000" />
       <workItem from="1515258681901" duration="15768000" />
-      <workItem from="1515333578785" duration="6062000" />
+      <workItem from="1515333578785" duration="7817000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39756000" />
+    <option name="totallyTimeSpent" value="41511000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
