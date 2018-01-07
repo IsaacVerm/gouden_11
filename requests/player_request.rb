@@ -1,4 +1,5 @@
 require_relative './request'
+require_relative '../payload_builder/player_payload_builder'
 require_relative '../models/player'
 
 class PlayerRequest < Request
@@ -18,8 +19,10 @@ class PlayerRequest < Request
   NAMES_XPATH = "//table[@class='playerlist']/tbody/tr/td/a"
   TEAMS_POS_XPATH = "//table[@class='playerlist']/tbody/tr/td/span"
 
-  def initialize(payload)
-    @payload = payload
+  def initialize(matchday, season, page)
+    @payload = PlayerPayloadBuilder.new(matchday, page).payload
+    @matchday = matchday
+    @season = season
   end
 
   def response_to_html(response)
@@ -112,6 +115,8 @@ class PlayerRequest < Request
         t.integer :goal_conceded
         t.integer :half_time
         t.integer :team_performance
+        t.string :matchday
+        t.string :season
       end
     end
 
@@ -132,7 +137,9 @@ class PlayerRequest < Request
                              clean_sheet: player_attributes[:clean_sheet],
                              goal_conceded: player_attributes[:goal_conceded],
                              half_time: player_attributes[:half_time],
-                             team_performance: player_attributes[:team_performance])
+                             team_performance: player_attributes[:team_performance],
+                             matchday: @matchday,
+                             season: @season)
     end
   end
 

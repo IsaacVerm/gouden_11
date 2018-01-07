@@ -4,20 +4,19 @@ module Scouting
 
   include Pages
 
-  NUMBER_OF_PLAYERS = ""
+  MORE = "(//a[@class='arrow-right'])[1]"
+  PAGES = "//li[@class='matchdayItem']"
 
   def self.go_to_page
     BROWSER.visit 'j2ee_g11/scouts/page.action'
   end
 
+  def self.get_more(n)
+    n.times { BROWSER.find(:xpath, MORE).click }
+  end
+
   def self.get_number_of_pages
-    raw_number_of_players = BROWSER.find(:xpath, NUMBER_OF_PLAYERS).text
-
-    number_of_players = Hash.new
-    total = ""
-    by_page = ""
-
-    total/by_page
+    BROWSER.find_all(:xpath, PAGES).last['page']
   end
 
 end
