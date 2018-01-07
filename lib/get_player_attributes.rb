@@ -6,19 +6,24 @@
 require 'awesome_print'
 
 require_relative '../requests/player_request'
+require_relative '../payload_builder/player_all_combinations'
 
 # single
-player = PlayerRequest.new('3', '2017-2018', '5')
-player.get_info
-player.get_attributes
-player.save_attributes
+# player = PlayerRequest.new('3', '2017-2018', '5')
+# player.get_info
+# player.get_attributes
+# player.save_attributes
 
 # all
+combinations = PlayerAllCombinations.combinations
 
-
-# matchday_page.zip do |matchday, page|
-#   player = PlayerRequest.new(PlayerPayloadBuilder.payload(matchday, page))
-#   player.get_info
-#   player.get_attributes
-#   player.save_attributes
-# end
+combinations.each do |combination|
+  ap combination
+  player = PlayerRequest.new(combination["matchday"],
+                             combination["season"],
+                             combination["page"],
+                             5)
+  player.get_info
+  player.get_attributes
+  player.save_attributes
+end

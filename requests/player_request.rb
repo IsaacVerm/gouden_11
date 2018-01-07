@@ -19,10 +19,12 @@ class PlayerRequest < Request
   NAMES_XPATH = "//table[@class='playerlist']/tbody/tr/td/a"
   TEAMS_POS_XPATH = "//table[@class='playerlist']/tbody/tr/td/span"
 
-  def initialize(matchday, season, page)
+  def initialize(matchday, season, page, delay)
     @payload = PlayerPayloadBuilder.new(matchday, page).payload
     @matchday = matchday
     @season = season
+
+    sleep(delay)
   end
 
   def response_to_html(response)
