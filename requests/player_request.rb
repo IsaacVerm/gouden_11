@@ -70,6 +70,7 @@ class PlayerRequest < Request
 
     attributes[:name] = get_names
     attributes[:team] = get_teams
+    attributes[:position] = get_positions
 
     PLAYER_VALUES_XPATH_IND.keys.each do |attribute|
       attributes[attribute] = get_attribute(attribute)
@@ -108,6 +109,7 @@ class PlayerRequest < Request
       create_table :players do |t|
         t.string :name
         t.string :team
+        t.string :position
         t.integer :price
         t.integer :goal
         t.integer :assist
@@ -131,6 +133,7 @@ class PlayerRequest < Request
     @attributes.each do |player_attributes|
       player = Player.create(name: player_attributes[:name],
                              team: player_attributes[:team],
+                             position: player_attributes[:position],
                              price: player_attributes[:price],
                              goal: player_attributes[:goal],
                              assist: player_attributes[:assist],

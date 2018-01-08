@@ -4,7 +4,7 @@ library(ggplot2)
 library(rlang)
 
 # connect to database
-setwd("/home/isaac/")
+setwd("/home/isaac/SpiderOak Hive/gouden_11/lib")
 con <- DBI::dbConnect(RSQLite::SQLite(), "gouden_11")
 
 # get players table
@@ -14,6 +14,7 @@ players <- tbl(con, "players")
 player_score_by_season = players %>%
   group_by(name, season) %>%
   summarise(team = team,
+            position = position,
             avg_price = mean(price),
             opening_price = price,
             goal = sum(goal),

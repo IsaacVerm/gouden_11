@@ -10,7 +10,7 @@ combinations.each do |combination|
   player = PlayerRequest.new(combination["matchday"],
                              combination["season"],
                              combination["page"],
-                             5)
+                             2)
   player.get_info
   player.get_attributes
   player.save_attributes
