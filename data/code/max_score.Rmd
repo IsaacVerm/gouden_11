@@ -51,7 +51,7 @@ For the time being we assume the following:
 * no replacements are made
 * no transfers are made
 
-### Function to pick a legal team
+## Function to pick a legal team
 
 To pick a legal team we have to specify the formation, cost limit and maximum number of players on the same team. Optionally we can remove some players before we start randomly making selections to make the picking process faster (albeit at the cost of possible suboptimal results).
 
@@ -115,31 +115,49 @@ pick <- function(formation,
 
 ```
 
-### Run picking function number of times
+## Run picking function number of times
 
-Let's presume we pick 2000 teams. Afterwards we filter out the ones who violated the constraints and we try to guess at which point the maximum total score stabilises by using the cumulative maximum score.
+Let's presume we pick 10000 teams in a 4-4-2 formation. Afterwards we filter out the ones who violated the constraints and we try to guess at which point the maximum total score stabilises by using the cumulative maximum score. We assume the point of stabilisation isn't influenced by the formation selected.
 
-```{r pick_n_times, cache=TRUE}
+```{r score_stabilisation, cache=TRUE}
 # run n times
-n = 2000
+n = 10
 selections <- replicate(n, pick("4-4-2", player_score_by_season))
 
 # filter out selections violating constraints
-violates = map_lgl(selections, function(selection) 'violated constraints' %in% selection)
-ind_violating_selections = which(violates)
-ind_correct_selections = which(!violates)
-percentage_violation = (sum(length(ind_violating_selections))/n)*100
+violating_selections <- function(selections) {
+  map_lgl(selections, function(selection) 'violated constraints' %in% selection)
+}
+
+ind_selections <- function(selections) {
+  violating <- violating_selections(selections)
+  ind <- list()
+  ind[["violating"]] <- which(violating)
+  ind[["correct"]] <- which(!violating)
+  return(ind)
+}
+
+ind_violating <- ind_selections(selections)[["violating"]]
+ind_correct <- ind_selections(selections)[["correct"]]
+
+percentage_violating <- function(selections) {
+  (sum(length(ind_violating))/n)*100
+}
 
 # after how many team picks does the maximum score stabilises?
-total_score = function(selection) {
+total_score <- function(selection) {
   sum(selection$total)
 }
 
-total_score_by_selection = selections %>%
-  .[ind_correct_selections] %>%
-  map_int(total_score)
+total_score_by_selection <- function(selections) {
+  selections %>%
+    
+}
+# total_score_by_selection <- selections %>%
+#   .[ind_correct] %>%
+#   map_int(total_score)
 
-cumulative_maximum_score = cummax(total_score_by_selection)
+cumulative_maximum_score <- cummax(total_score_by_selection)
 
 score_stabilisation <- data.frame(max_score_preceding_selections = cumulative_maximum_score,
                                   score_selection = total_score_by_selection,
@@ -152,5 +170,14 @@ ggplot(data = score_stabilisation,
 
 ```
 
-`r percentage_violation`% of the selections generated violated at least one rule.
+`r percentage_violating(selections)`% of the selections generated violated at least one rule. More importantly, we can see there's not a lot of added value in picking more selections than 10000 since the increase in score clearly tops of.
+
+Now let's see which formation is the best one to pick. We pick 2000 teams for each allowed formation.
+
+```{r best_formation}
+# allowed formations
+formations <- c("3-4-3","4-4-2","4-3-3","4-5-1","5-2-3","3-5-2")
+
+```
+
 
