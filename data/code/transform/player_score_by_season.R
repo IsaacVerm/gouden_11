@@ -42,5 +42,3 @@ player_score_by_season = as.data.frame(player_score_by_season) %>% # must be dat
 # only keep relevant data
 rm(list=setdiff(ls(), "player_score_by_season"))
 
-write.csv(player_score_by_season, "player_score_by_season.csv")
-
