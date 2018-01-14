@@ -34,6 +34,13 @@ total_expression = paste(total_var, collapse = '+')
 player_score_by_season = player_score_by_season %>%
   mutate(total = !!parse_quosure(total_expression))
 
+# calculate contribution
+player_score_by_season = as.data.frame(player_score_by_season) %>% # must be dataframe if not SQL division
+  mutate(contribution = total/opening_price) %>%
+  as_tibble
+
 # only keep relevant data
 rm(list=setdiff(ls(), "player_score_by_season"))
+
+write.csv(player_score_by_season, "player_score_by_season.csv")
 
